@@ -13,7 +13,7 @@
 h5.ele.me
 
 [Script]
-http-response ^https:\/\/h5\.ele\.me\/restapi\/eus\/v\d\/current_user script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Script/elemGetCookies.js
+http-request ^https:\/\/h5\.ele\.me\/restapi\/eus\/v\d\/current_user$ script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Script/elemGetCookies.js
 cron "0 5 0 * * *" script-path=https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Script/elemSign.js
 ```
 
@@ -25,7 +25,7 @@ h5.ele.me
 
 [rewrite_local]
 
-^https:\/\/h5\.ele\.me\/restapi\/eus\/v\d\/current_user url script-response-body elemGetCookies.js
+^https:\/\/h5\.ele\.me\/restapi\/eus\/v\d\/current_user$ url script-request-header nzw9314/Script/elemGetCookies.js
 
 
 
@@ -51,10 +51,14 @@ h5.ele.me
 
 const cookieName = '饿了么'
 const cookieKey = 'cookie_elem'
+const UserId='user_id_elem'
 const sy = init()
 var cookieVal =sy.getdata(cookieKey);
-// var regx=/(USERID=)(\d+)(;)/;
-// cookieVal.replace(regx,'$2');
+var regx=/USERID=\d+/;
+
+var userid=cookieVal.match(regx)[0];
+userid=userid.replace('USERID=','');
+console.log(userid);
 var endurl='/sign_in'
 sign()
 
@@ -62,11 +66,11 @@ function sign() {
   const timestamp = Date.parse(new Date())
   let url = { url: `https://h5.ele.me/restapi/member/v2/users/`, headers: { Cookie: cookieVal } }
   if(cookieVal==undefined||cookieVal=="0"||cookieVal==null){
-	   sy.msg(cookieName, "未获取UserID", '');
+	   sy.msg(cookieName, "未获取Cookie", '');
 	   return ;
   }
   url.headers['Origin']='https://tb.ele.me';
-  url.url+=cookieVal;
+  url.url+=userid;
   url.url+=endurl;
   sy.log(url.url);
   sy.post(url, (error, response, data) => {
@@ -74,13 +78,13 @@ function sign() {
     const title = `${cookieName}`
     let subTitle = ''
     let detail = ''
-    sy.log(response);
-    if (response == 200) {
+    sy.log(response.status);
+    if (response.status == 200) {
       subTitle = '签到结果: 成功'
       // else subTitle = '签到结果: 成功 (重复签到)'
       // detail = `人人钻: ${result.data.userinfo.point}, 登录天数: ${result.data.usercount.cont_login} -> ${result.data.upgrade_day}`
      sy.msg(title, subTitle, detail)
-    } else if(response == 400) {
+    } else if(response.status == 400) {
       subTitle = '签到结果: 重复'
       sy.msg(title, subTitle, detail)
     }
@@ -123,15 +127,17 @@ function init() {
       $task.fetch(url).then((resp) => cb(null, {}, resp.body))
     }
   }
-  post = (url, cb) => {
-    if (isSurge()) {
-      $httpClient.post(url, cb)
-    }
+  post = (options, callback) => {
     if (isQuanX()) {
-      url.method = 'POST'
-      $task.fetch(url).then((resp) => cb(null, resp.statusCode, resp.body))
+        if (typeof options == "string") options = { url: options }
+        options["method"] = "POST"
+        $task.fetch(options).then(response => {
+            response["status"] = response.statusCode
+            callback(null, response, response.body)
+        }, reason => callback(reason.error, null, null))
     }
-  }
+    if (isSurge()) $httpClient.post(options, callback)
+}
   done = (value = {}) => {
     $done(value)
   }

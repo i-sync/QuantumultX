@@ -5,25 +5,19 @@
 
 只测试自用脚本，其他大部分脚本未测试可用性
 
-目前使用QuantumultX最新1.05版本(TF188+)，
-所以优先更新
-①.Js_local_WorkingCopy.conf
-(本地脚本订阅,⚠️仅限Qx1.05 TF188+使用)
 
-②.Js_Local_WorkingCopy_Cookie.conf
-(Cookie获取订阅。Cookie失效时启用，成功后禁用)
+⚠️远程外部资源请使用以下订阅(适用于TF版198+)
 
-⚠️QX 1.05之前的请使用以下订阅:
+Js.conf(远程脚本订阅): https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Js.conf
 
-Js.conf(远程订阅脚本)
-
+Get_Cookie_Remote.conf (远程获取Cookie订阅): https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Get_Cookie_Remote.conf
 
 
 1.脚本本地化配置:
 
 1⃣️在本地建立文件夹
-目录 iCloud Drive/QuantumultX/Script/nzw9314
-或者 我的iPhone/QuantumultX/Script/nzw9314
+目录 iCloud Drive/QuantumultX/Scripts/nzw9314
+或者 我的iPhone/QuantumultX/Scripts/nzw9314
 
 2⃣️用working copy挂载我的库:
 https://github.com/nzw9314/QuantumultX.git
@@ -31,15 +25,25 @@ https://github.com/nzw9314/QuantumultX.git
 (挂载教程: https://www.notion.so/iCloud-Github-948f19e65e1a47b3b468451491a3f34b)
 
 3⃣️订阅我的[rewrite_remote]
-①.https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Js_local_WorkingCopy.conf
+①.Js_local_WorkingCopy.conf(本地脚本订阅) : https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Js_local_WorkingCopy.conf
 
-(本地脚本订阅)
 
-②.https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Js_Local_WorkingCopy_Cookie.conf
+②.⚠️适用于商店版1.05
+https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Js_Local_WorkingCopy_Cookie.conf   
 
-(Cookie获取订阅。Cookie失效时启用，成功后禁用)
+③.⚠️适用于TF版195+
+https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Get_Cookie_New.conf    
+
+④.⚠️适用于TF版198+
+https://raw.githubusercontent.com/nzw9314/QuantumultX/master/Get_Cookie_Remote.conf
+
+(⚠️Cookie获取订阅,根据版本三选一。Cookie失效时启用，成功后禁用)
+
+
 
 4⃣️Js_local_WorkingCopy.conf包括
+
+
 ①.Nobyda 全部脚本,
 ②.langkhach 全部脚本
 ③.chavyleung 签到脚本
@@ -51,6 +55,8 @@ https://github.com/nzw9314/QuantumultX.git
 需要其他的脚本请自行添加路径;
 
 2.WorkingCopy同步更新脚本库包括:
+
+
 ① NobyDa,
 ② langkhach270389,
 ③ Choler,
